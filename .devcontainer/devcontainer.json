@@ -1,0 +1,19 @@
+{
+    "name": "C++ Dev Container",
+    "dockerComposeFile": "./docker-compose.yml",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-python.python",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "twxs.cmake"
+            ],
+            "settings": {}
+        }
+    },
+    "service": "cpp-sandbox",
+    "workspaceFolder": "/app"
+}

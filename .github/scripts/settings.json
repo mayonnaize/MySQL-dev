@@ -1,0 +1,8 @@
+{
+  "board":{
+    "name": "やってみたいこと",
+    "branches":{
+        "main": "Githubテンプレートの作成"
+    }
+  }
+}

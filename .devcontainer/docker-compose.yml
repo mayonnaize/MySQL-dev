@@ -1,0 +1,12 @@
+version: '3'
+services:
+  cpp-sandbox:
+    image: ghcr.io/mayonnaize/cpp-template
+    build:
+      context: ../.github/scripts/
+      dockerfile: Dockerfile
+    user: user
+    volumes:
+      - ../:/app
+    working_dir: /app
+    tty: true

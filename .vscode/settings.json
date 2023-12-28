@@ -1,0 +1,19 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+    "cmake.sourceDirectory": "/app",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "Debug", // 任意のビルドタイプを指定
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${workspaceFolder}/build", // ビルドディレクトリを指定
+        // "CMAKE_ARCHIVE_OUTPUT_DIRECTORY": "/app/build/lib", // ライブラリの中間生成物の出力先
+        // "CMAKE_LIBRARY_OUTPUT_DIRECTORY": "/app/build/lib", // 共有ライブラリの中間生成物の出力先
+        // "CMAKE_COMPILE_OBJECT_OUTPUT_DIRECTORY": "/app/build/obj", // オブジェクトファイルの出力先
+    },
+    "workbench.colorCustomizations": {
+        "tab.activeBackground": "#0000ff7e",
+        "activityBar.background": "#243200",
+        "titleBar.activeBackground": "#324700",
+        "titleBar.activeForeground": "#F2FFD1"
+    },
+}
