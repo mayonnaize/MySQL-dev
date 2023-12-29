@@ -14,6 +14,6 @@
             "settings": {}
         }
     },
-    "service": "cpp-sandbox",
+    "service": "mysql-dev",
     "workspaceFolder": "/app"
 }

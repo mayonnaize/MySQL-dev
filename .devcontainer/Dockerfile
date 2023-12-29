@@ -1,17 +1,22 @@
 # ベースイメージの選択
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 # 必要なライブラリのインストール
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    clang \
     build-essential \
+    clang-10 \
+    libc++-10-dev \
     cmake \
     gdb \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-10 10
+RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-10 10
+WORKDIR /usr/lib/x86_64-linux-gnu
+RUN ln -s libc++abi.so.1 libc++abi.so
 ENV CC=clang
 ENV CXX=clang++
 

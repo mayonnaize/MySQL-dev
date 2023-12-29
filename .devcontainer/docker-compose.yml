@@ -1,9 +1,9 @@
 version: '3'
 services:
-  cpp-sandbox:
-    image: ghcr.io/mayonnaize/cpp-template
+  mysql-dev:
+    image: ghcr.io/mayonnaize/mysql-dev:latest
     build:
-      context: ../.github/scripts/
+      context: ./
       dockerfile: Dockerfile
     user: user
     volumes:

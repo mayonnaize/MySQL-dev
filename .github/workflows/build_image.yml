@@ -3,12 +3,12 @@ name: Publish Docker image to ghcr.io
 on:
   push:
     paths:
-      - .github/scripts/Dockerfile
+      - .devcontainer/Dockerfile
       - .github/workflows/build_image.yml
 
 env:
   # name must be lowercase
-  IMAGE_NAME: cpp-template
+  IMAGE_NAME: mysql-dev
 
 jobs:
   publish:
@@ -26,7 +26,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Build the Docker image
-        run: docker build -t ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest .github/scripts
+        run: docker build -t ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest .devcontainer/
 
       - name: Push Docker image to ghcr.io
         run: |
