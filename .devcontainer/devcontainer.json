@@ -9,7 +9,10 @@
                 "ms-vscode.cmake-tools",
                 "ms-vscode.cpptools",
                 "ms-vscode.cpptools-extension-pack",
-                "twxs.cmake"
+                "twxs.cmake",
+                "amazonwebservices.aws-toolkit-vscode",
+                "cweijan.dbclient-jdbc",
+                "cweijan.vscode-mysql-client2"
             ],
             "settings": {}
         }

@@ -1,6 +1,7 @@
 version: '3'
 services:
   mysql-dev:
+    # 172.26.0.1で接続できる
     image: ghcr.io/mayonnaize/mysql-dev:latest
     build:
       context: ./
@@ -10,3 +11,23 @@ services:
       - ../:/app
     working_dir: /app
     tty: true
+    networks:
+      - app-net
+
+  # https://mmtomitomimm.blogspot.com/2018/04/docker-mysqldb.html
+  mysql-server:
+    build: ./mysql/
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
