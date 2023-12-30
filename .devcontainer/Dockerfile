@@ -20,6 +20,10 @@ RUN ln -s libc++abi.so.1 libc++abi.so
 ENV CC=clang
 ENV CXX=clang++
 
+# ! mysql-server
+# apt-get install libncurses5-dev
+# apt install wget
+
 # ユーザ追加
 ARG USERNAME=user
 ARG GROUPNAME=user
@@ -32,3 +36,6 @@ RUN groupadd -g $GID $GROUPNAME && \
     echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER $USERNAME
 WORKDIR /home/$USERNAME/
+# ! mysql-server
+# wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz
+# tar -zxvf boost_1_59_0.tar.gz
