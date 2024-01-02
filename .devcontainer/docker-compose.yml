@@ -1,21 +1,24 @@
 version: '3'
 services:
   mysql-dev:
-    # 172.26.0.1で接続できる
+    container_name: mysql-dev
     image: ghcr.io/mayonnaize/mysql-dev:latest
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile
     user: user
     volumes:
       - ../:/app
     working_dir: /app
     tty: true
     networks:
-      - app-net
+      app_net:
+        ipv4_address: 172.30.0.2
 
   # https://mmtomitomimm.blogspot.com/2018/04/docker-mysqldb.html
   mysql-server:
+    container_name: mysql-server
+    # image: mysql-server
     build: ./mysql/
     volumes:
       - ./mysql/db:/docker-entrypoint-initdb.d
@@ -26,8 +29,13 @@ services:
     ports:
       - 3306:3306
     networks:
-      - app-net
+      app_net:
+        ipv4_address: 172.30.0.3
 
 networks:
-  app-net:
+  app_net:
     driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.30.0.1/24
