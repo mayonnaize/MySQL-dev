@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     gdb \
     sudo \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-10 10
@@ -20,9 +21,48 @@ RUN ln -s libc++abi.so.1 libc++abi.so
 ENV CC=clang
 ENV CXX=clang++
 
+# ###########################################################################################
 # ! mysql-server
-# apt-get install libncurses5-dev
-# apt install wget
+RUN apt-get update && apt-get install -y \
+    libncurses5-dev \
+    wget
+
+WORKDIR /home/root/
+RUN wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz --timeout=30
+RUN tar -zxvf boost_1_59_0.tar.gz
+
+RUN git clone https://github.com/mayonnaize/mysql-server.git -b mysql-5.7.20 --depth 1
+
+WORKDIR /home/root/bin/server
+RUN cmake /home/root/mysql-server \
+    -DWITHOUT_SERVER=ON \
+    -DDOWNLOAD_BOOST=1 \
+    -DWITH_BOOST=/home/root/boost_1_59_0 \
+    -DWITH_UNIT_TESTS=OFF \
+    -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -stdlib=libc++"
+
+RUN make -j 8 && \
+    make install
+
+# ###########################################################################################
+# ! mysql-connector-cpp
+RUN apt-get install libssl-dev
+
+WORKDIR /home/root/
+RUN git clone https://github.com/mayonnaize/mysql-connector-cpp.git -b 1.1.12 --depth 1
+
+WORKDIR /home/root/bin/connector
+RUN cmake /home/root/mysql-connector-cpp \
+    -DBOOST_ROOT=/home/root/boost_1_59_0 \
+    -DUSE_SERVER_CXXFLAGS=1 \
+    -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-deprecated-declarations" \
+    -DMYSQL_DIR=/usr/local/mysql \
+    -DMYSQL_INCLUDE_DIR=/usr/local/mysql/include \
+    -DMYSQL_LIB_DIR=/usr/local/mysql/lib
+
+RUN make -j 8 && \
+    make install
+# ###########################################################################################
 
 # ユーザ追加
 ARG USERNAME=user
@@ -36,6 +76,3 @@ RUN groupadd -g $GID $GROUPNAME && \
     echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER $USERNAME
 WORKDIR /home/$USERNAME/
-# ! mysql-server
-# wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz
-# tar -zxvf boost_1_59_0.tar.gz

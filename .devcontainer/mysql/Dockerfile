@@ -1,5 +1,5 @@
 #使うDockerイメージ
-FROM mysql
+FROM mysql:5.7
 
 #MySQL設定ファイルをイメージ内にコピー
 ADD ./my.cnf /etc/mysql/conf.d/my.cnf
