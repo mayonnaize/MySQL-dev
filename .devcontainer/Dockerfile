@@ -32,7 +32,7 @@ RUN wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.t
 RUN tar -zxvf boost_1_59_0.tar.gz
 RUN chmod 777 boost_1_59_0
 
-RUN git clone https://github.com/mayonnaize/mysql-server.git -b mysql-5.7.20 --depth 1
+RUN git clone https://github.com/mysql/mysql-server.git -b mysql-5.7.20 --depth 1
 
 WORKDIR /home/root/bin/server
 RUN cmake /home/root/mysql-server \
@@ -50,7 +50,7 @@ RUN make -j 8 && \
 RUN apt-get install libssl-dev
 
 WORKDIR /home/root/
-RUN git clone https://github.com/mayonnaize/mysql-connector-cpp.git -b 1.1.12 --depth 1
+RUN git clone https://github.com/mysql/mysql-connector-cpp.git -b 1.1.12 --depth 1
 
 WORKDIR /home/root/bin/connector
 RUN cmake /home/root/mysql-connector-cpp \
