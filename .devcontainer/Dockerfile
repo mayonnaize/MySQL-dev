@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /home/root/
 RUN wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz --timeout=30
 RUN tar -zxvf boost_1_59_0.tar.gz
+RUN chmod 777 boost_1_59_0
 
 RUN git clone https://github.com/mayonnaize/mysql-server.git -b mysql-5.7.20 --depth 1
 

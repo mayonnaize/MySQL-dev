@@ -3,9 +3,9 @@
 ls --ignore=*.sh | xargs rm -r
 clear
 
-cmake /app/mysql-connector-cpp \
+cmake /home/root/mysql-connector-cpp \
     -DCMAKE_BUILD_TYPE=Debug \
-    -DBOOST_ROOT=~/boost_1_59_0 \
+    -DBOOST_ROOT=/home/root/boost_1_59_0 \
     -DUSE_SERVER_CXXFLAGS=1 \
     -DMYSQL_CFLAGS="" \
     -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-deprecated-declarations" \
