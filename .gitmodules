@@ -1,6 +1,0 @@
-[submodule "mysql-server"]
-	path = mysql-server
-	url = https://github.com/mayonnaize/mysql-server.git
-[submodule "mysql-connector-cpp"]
-	path = mysql-connector-cpp
-	url = https://github.com/mayonnaize/mysql-connector-cpp.git
