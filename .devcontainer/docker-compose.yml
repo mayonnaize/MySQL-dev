@@ -9,9 +9,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../:/app
-    working_dir: /home/root/bin/server
-    # working_dir: /home/root/bin/connector
-    # working_dir: /app
+    working_dir: /app
     tty: true
     networks:
       app_net:

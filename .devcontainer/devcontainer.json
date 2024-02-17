@@ -18,5 +18,6 @@
         }
     },
     "service": "mysql-dev",
-    "workspaceFolder": "/app"
+    "workspaceFolder": "/home/root/bin/server"
+    // "workspaceFolder": "/app"
 }
