@@ -2,24 +2,28 @@ version: '3'
 services:
   mysql-dev:
     container_name: mysql-dev
-    image: ghcr.io/mayonnaize/mysql-dev:latest
-    # build:
-    #   context: ./
-    #   dockerfile: Dockerfile
-    user: user
+    image: ghcr.io/mayonnaize/mysql-dev:2004
+    # image: ghcr.io/mayonnaize/mysql-dev:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
     volumes:
       - ../:/app
-    working_dir: /app
+    working_dir: /home/root/bin/server
+    # working_dir: /home/root/bin/connector
+    # working_dir: /app
     tty: true
     networks:
       app_net:
         ipv4_address: 172.30.0.2
 
-  # https://mmtomitomimm.blogspot.com/2018/04/docker-mysqldb.html
+  # # https://mmtomitomimm.blogspot.com/2018/04/docker-mysqldb.html
   mysql-server:
     container_name: mysql-server
-    # image: mysql-server
-    build: ./mysql/
+    image: mysql-server
+    build:
+      context: ./mysql/
+      dockerfile: Dockerfile
     volumes:
       - ./mysql/db:/docker-entrypoint-initdb.d
     environment:
@@ -36,6 +40,6 @@ networks:
   app_net:
     driver: bridge
     ipam:
-     driver: default
-     config:
-       - subnet: 172.30.0.1/24
+      driver: default
+      config:
+        - subnet: 172.30.0.1/24

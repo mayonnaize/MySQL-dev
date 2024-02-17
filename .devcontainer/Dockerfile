@@ -1,21 +1,24 @@
 # ベースイメージの選択
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # 必要なライブラリのインストール
-RUN apt-get update && apt-get install -y \
+RUN apt-get update
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
+RUN apt-get install -y \
     python3 \
     python3-pip \
     build-essential \
-    clang-10 \
-    libc++-10-dev \
+    clang-11 \
+    libc++-11-dev \
     cmake \
     gdb \
-    sudo \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-10 10
-RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-10 10
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-11 11
+RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-11 11
 WORKDIR /usr/lib/x86_64-linux-gnu
 RUN ln -s libc++abi.so.1 libc++abi.so
 ENV CC=clang
@@ -26,24 +29,24 @@ ENV CXX=clang++
 RUN apt-get update && apt-get install -y \
     libncurses5-dev \
     wget
-
+# boostは必要みたい
 WORKDIR /home/root/
-RUN wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz --timeout=30
-RUN tar -zxvf boost_1_59_0.tar.gz
-RUN chmod 777 boost_1_59_0
+RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_1_72_0.tar.gz --timeout=30
+RUN tar -zxvf boost_1_72_0.tar.gz
+RUN chmod 777 boost_1_72_0
 
-RUN git clone https://github.com/mysql/mysql-server.git -b mysql-5.7.20 --depth 1
+RUN git clone https://github.com/mysql/mysql-server.git -b mysql-8.0.36 --depth 1
 
-WORKDIR /home/root/bin/server
-RUN cmake /home/root/mysql-server \
-    -DWITHOUT_SERVER=ON \
-    -DDOWNLOAD_BOOST=1 \
-    -DWITH_BOOST=/home/root/boost_1_59_0 \
-    -DWITH_UNIT_TESTS=OFF \
-    -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -stdlib=libc++"
+# WORKDIR /home/root/bin/server
+# RUN cmake /home/root/mysql-server \
+#     -DWITHOUT_SERVER=ON \
+#     -DDOWNLOAD_BOOST=1 \
+#     -DWITH_BOOST=/home/root/boost_1_59_0 \
+#     -DWITH_UNIT_TESTS=OFF \
+#     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -stdlib=libc++"
 
-RUN make -j 8 && \
-    make install
+# RUN make -j 8 && \
+#     make install
 
 # ###########################################################################################
 # ! mysql-connector-cpp
@@ -52,28 +55,22 @@ RUN apt-get install libssl-dev
 WORKDIR /home/root/
 RUN git clone https://github.com/mysql/mysql-connector-cpp.git -b 1.1.12 --depth 1
 
-WORKDIR /home/root/bin/connector
-RUN cmake /home/root/mysql-connector-cpp \
-    -DBOOST_ROOT=/home/root/boost_1_59_0 \
-    -DUSE_SERVER_CXXFLAGS=1 \
-    -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-deprecated-declarations" \
-    -DMYSQL_DIR=/usr/local/mysql \
-    -DMYSQL_INCLUDE_DIR=/usr/local/mysql/include \
-    -DMYSQL_LIB_DIR=/usr/local/mysql/lib
+# WORKDIR /home/root/bin/connector
+# RUN cmake /home/root/mysql-connector-cpp \
+#     -DBOOST_ROOT=/home/root/boost_1_59_0 \
+#     -DUSE_SERVER_CXXFLAGS=1 \
+#     -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-deprecated-declarations" \
+#     -DMYSQL_DIR=/usr/local/mysql \
+#     -DMYSQL_INCLUDE_DIR=/usr/local/mysql/include \
+#     -DMYSQL_LIB_DIR=/usr/local/mysql/lib
 
-RUN make -j 8 && \
-    make install
-# ###########################################################################################
+# RUN make -j 8 && \
+#     make install
 
-# ユーザ追加
-# ARG USERNAME=user
-# ARG GROUPNAME=user
-# ARG UID=1000
-# ARG GID=1000
-# ARG PASSWORD=user
-# RUN groupadd -g $GID $GROUPNAME && \
-#     useradd -m -s /bin/bash -u $UID -g $GID -G sudo $USERNAME && \
-#     echo $USERNAME:$PASSWORD | chpasswd && \
-#     echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-# USER $USERNAME
-# WORKDIR /home/$USERNAME/
+RUN mkdir -p /home/root/bin/server && \
+    mkdir -p /home/root/bin/connector
+
+ADD clean.sh /home/root/bin/server
+ADD server-build.sh /home/root/bin/server
+ADD clean.sh /home/root/bin/connector
+ADD conn-build.sh /home/root/bin/connector
