@@ -36,7 +36,7 @@ RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_
 RUN tar -zxvf boost_1_72_0.tar.gz
 RUN chmod 777 boost_1_72_0
 
-RUN git clone https://github.com/mysql/mysql-server.git -b mysql-8.0.36 --depth 1
+RUN git clone https://github.com/mysql/mysql-server.git -b mysql-8.0.21 --depth 1
 
 WORKDIR /home/root/bin/server
 RUN cmake /home/root/mysql-server \
