@@ -38,6 +38,10 @@ RUN chmod 777 boost_1_72_0
 
 RUN git clone https://github.com/mysql/mysql-server.git -b mysql-8.0.21 --depth 1
 
+RUN apt-get install -y libssl-dev
+# SSLエラー
+# https://rabbitfoot141.hatenablog.com/entry/2023/01/22/155534
+# 8.0.29 以下のビルドでは OpenSSL のバージョンが 3 以上だとコケる
 WORKDIR /home/root/bin/server
 RUN cmake /home/root/mysql-server \
     -DWITHOUT_SERVER=ON \
@@ -57,12 +61,12 @@ RUN git clone https://github.com/mysql/mysql-connector-cpp.git -b 1.1.12 --depth
 
 WORKDIR /home/root/bin/connector
 
-RUN cmake /home/root/bin/mysql-connector-cpp \
+RUN cmake /home/root/mysql-connector-cpp \
     -DUSE_SERVER_CXXFLAGS=1 \
     -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-deprecated-declarations" \
     -DBOOST_ROOT=/home/root/boost_1_72_0 \
-    -DMYSQL_INCLUDE_DIR=/usr/include/mysql \
-    -DMYSQL_LIB_DIR=/usr/lib/x86_64-linux-gnu
+    -DMYSQL_INCLUDE_DIR=/usr/local/mysql/include/ \
+    -DMYSQL_LIB_DIR=/usr/local/mysql/lib/
 
 RUN make -j 8 && \
     make install
